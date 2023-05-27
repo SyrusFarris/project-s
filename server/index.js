@@ -1,23 +1,28 @@
-const { MongoClient } = require("mongodb");
+import express from 'express';
+import * as dotenv from 'dotenv';
+import cors from 'cors';
 
-// Replace the uri string with your connection string.
-const uri = "mongodb+srv://syriousmedia:syrussyrus@project-s.8xqvags.mongodb.net/?retryWrites=true&w=majority";
+import connectDB from './mongodb/connect.js';
 
-const client = new MongoClient(uri);
+dotenv.config();
 
-async function run() {
-  try {
-    const database = client.db('sample_mflix');
-    const movies = database.collection('movies');
+const app = express();
+app.use(cors());
+app.use(express.json({ limit: '50mb' }));
 
-    // Query for a movie that has the title 'Back to the Future'
-    const query = { title: 'Back to the Future' };
-    const movie = await movies.findOne(query);
 
-    console.log(movie);
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
+app.get('/', async (req, res) => {
+    res.send('Hello from Project-S');
+})
+
+const startServer = async () => {
+
+    try {
+        connectDB(process.env.MONGODB_URL);
+        app.listen(8080, () => console.log('Server has started on port http://localhost:8080'))
+    } catch (error) {
+        console.log(error);
+    }
 }
-run().catch(console.dir);
+
+startServer();
