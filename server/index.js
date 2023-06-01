@@ -1,28 +1,31 @@
-import express from 'express';
-import * as dotenv from 'dotenv';
-import cors from 'cors';
-
-import connectDB from './mongodb/connect.js';
-
-dotenv.config();
-
+const express = require('express');
 const app = express();
+const cors = require('cors');
+const mysql = require('mysql');
+
+const PORT = 8080
 app.use(cors());
-app.use(express.json({ limit: '50mb' }));
 
+const db = mysql.createConnection({
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'projectsDB'
+});
 
-app.get('/', async (req, res) => {
-    res.send('Hello from Project-S');
-})
+//ROUTE
+app.get("/db", (req, res) => {
+    db.query("SELECT * FROM users", (err, result) => {
+        if(err) {
+            console.log(err);
+        } else {
+            res.send(result);
+            console.log(result);
+            console.log('Connected!');
+        }
+    });
+});
 
-const startServer = async () => {
-
-    try {
-        connectDB(process.env.MONGODB_URL);
-        app.listen(8080, () => console.log('Server has started on port http://localhost:8080'))
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-startServer();
+app.listen(PORT, ()=>{
+    console.log(`Server is running on http://localhost/${PORT}/`);
+});
