@@ -13,3 +13,7 @@ CREATE TABLE users (
     PRIMARY KEY (ID)
 
 );
+
+INSERT INTO users (user_name)
+VALUES
+('Syrus');
