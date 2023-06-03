@@ -10,10 +10,17 @@ const pool = mysql.createPool({
     database: process.env.MYSQL_DATABASE
 }).promise()
 
-
-async function getUsers() {
+// Get users
+export async function getUsers() {
     const [rows] = await pool.query("SELECT * FROM users")
     return rows
+}
+
+// Create User
+export async function createUser( user_name, user_password) {
+    const [result] = await pool.query(`INSERT INTO users (user_name, user_password) VALUES (?, ?)`, [user_name, user_password])
+    const id = result.insertId.id
+    return getUsers(id)
 }
 
 const users = await getUsers()
