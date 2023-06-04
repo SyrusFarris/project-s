@@ -18,7 +18,7 @@ export async function getUsers() {
 
 // Create User
 export async function createUser( user_name, user_password) {
-    const [result] = await pool.query(`INSERT INTO users (user_name, user_password) VALUES (?, ?)`, [user_name, user_password])
+    const [result] = await pool.query(`INSERT INTO users (user_name, passwordHash) VALUES (?, ?)`, [user_name, passwordHash])
     const id = result.insertId.id
     return getUsers(id)
 }

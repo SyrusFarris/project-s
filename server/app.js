@@ -12,7 +12,7 @@ app.get("/users", async (req, res) => {
     res.send(users)
 })
 
-// Request to get a single user
+// Request to get a single user by id
 app.get("/users/:id", async (req, res) => {
     const id = req.params.id
     const user = await getUsers(id)
@@ -21,8 +21,8 @@ app.get("/users/:id", async (req, res) => {
 
 // Request to add a user
 app.post("/users", async (req, res) => {
-    const { user_name, user_password } = req.body
-    const user = await createUser(user_name, user_password)
+    const { user_name, passwordHash } = req.body
+    const user = await createUser(user_name, passwordHash)
     res.status(201).send(user)
 })
 
